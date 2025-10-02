@@ -6,15 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
   let analyser;
   let microphone;
 
-  // Read candles + scale from URL
-  function getParamsFromURL() {
+  // Read number of candles from URL
+  function getCandlesFromURL() {
     const params = new URLSearchParams(window.location.search);
     const n = parseInt(params.get("candles"));
-    const s = parseInt(params.get("scale"));
-    return {
-      candles: isNaN(n) ? 0 : n,
-      scale: isNaN(s) ? 80 : s // الافتراضي 80 (مناسب للكيكة)
-    };
+    return isNaN(n) ? 23 : n; // default 23
   }
 
   function updateCandleCount() {
@@ -37,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCandleCount();
   }
 
-  // Add candle on click
+  // Click to add candle (optional)
   cake.addEventListener("click", function (event) {
     const rect = cake.getBoundingClientRect();
     const left = event.clientX - rect.left;
@@ -45,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addCandle(left, top);
   });
 
-  // Audio detection
+  // Audio detection for blowing
   function isBlowing() {
     if (!analyser) return false;
     const bufferLength = analyser.frequencyBinCount;
@@ -99,21 +95,21 @@ document.addEventListener("DOMContentLoaded", function () {
       Math.cos(4 * t);
 
     const centerX = rect.width / 2;
-    const centerY = rect.height / 4; // فوق النص شوية
+    const centerY = rect.height / 3.5; // رفع القلب فوق الكيكة
 
     return {
       x: centerX + x * scale,
-      y: centerY - y * scale * 0.6 // ضغط القلب رأسياً
+      y: centerY - y * scale * 0.6
     };
   }
 
   // Place candles in heart shape
-  const { candles: initialCandles, scale: userScale } = getParamsFromURL();
+  const initialCandles = getCandlesFromURL();
 
   requestAnimationFrame(() => {
     const rect = cake.getBoundingClientRect();
     if (initialCandles > 0) {
-      const scale = rect.width / userScale;
+      const scale = rect.width / 60; // قلب ثابت Scale = 60
       for (let i = 0; i < initialCandles; i++) {
         const t = (Math.PI * 2 * i) / initialCandles;
         const { x, y } = heartCoordinates(t, scale, rect);
