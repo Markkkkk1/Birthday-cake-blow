@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener("DOMContentLoaded", function () {
   const cake = document.querySelector(".cake");
   const candleCountDisplay = document.getElementById("candleCount");
@@ -22,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function addCandle(left, top) {
     const candle = document.createElement("div");
     candle.className = "candle";
-    candle.style.left = (left) + "px";
-    candle.style.top = (top) + "px";
+    candle.style.left = left + "px";
+    candle.style.top = top + "px";
 
     const flame = document.createElement("div");
     flame.className = "flame";
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCandleCount();
   }
 
-  // Add candle on click (manual)
+  // Add candle on click
   cake.addEventListener("click", function (event) {
     const rect = cake.getBoundingClientRect();
     const left = event.clientX - rect.left;
@@ -53,8 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
     const average = sum / bufferLength;
 
-    // threshold — قللتها لـ 20 عشان الاستجابة تكون أسهل
-    return average > 20;
+    return average > 20; // حساسية أسهل
   }
 
   function blowOutCandles() {
@@ -71,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Try to access mic
+  // Mic access
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(function (stream) {
@@ -80,46 +78,38 @@ document.addEventListener("DOMContentLoaded", function () {
         microphone = audioContext.createMediaStreamSource(stream);
         microphone.connect(analyser);
         analyser.fftSize = 256;
-        // poll every 200ms
         setInterval(blowOutCandles, 200);
       })
       .catch(function (err) {
         console.log("Unable to access microphone: " + err);
       });
-  } else {
-    console.log("getUserMedia not supported on your browser!");
   }
 
-  // H E A R T   S H A P E  — parametric heart
+  // Heart coordinates
   function heartCoordinates(t, scale, rect) {
-  // معادلة القلب
-  const x = 16 * Math.pow(Math.sin(t), 3);
-  const y =
-    13 * Math.cos(t) -
-    5 * Math.cos(2 * t) -
-    2 * Math.cos(3 * t) -
-    Math.cos(4 * t);
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y =
+      13 * Math.cos(t) -
+      5 * Math.cos(2 * t) -
+      2 * Math.cos(3 * t) -
+      Math.cos(4 * t);
 
-  // مركز الكيكة
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2.8; // فوق النص شوية
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2.8; // مظبوط فوق الطبقة
 
-  return {
-    x: centerX + x * scale,
-    y: centerY - y * scale * 0.6 // ضغط القلب شوية علشان ما ينزلش لتحت
-  };
-}
+    return {
+      x: centerX + x * scale,
+      y: centerY - y * scale * 0.6 // ضغط القلب رأسياً
+    };
+  }
 
-  // Place initial candles from URL in heart shape
+  // Place candles in heart shape
   const initialCandles = getCandlesFromURL();
 
-  // Wait a tick to ensure cake layout computed correctly
   requestAnimationFrame(() => {
     const rect = cake.getBoundingClientRect();
     if (initialCandles > 0) {
-      // choose scale that fits the cake width — tweak multiplier if needed
-      // scale relative to rect.width: larger width -> larger scale
-const scale = rect.width / 80; // دي هتخلي القلب مناسب لحجم الكيكة
+      const scale = rect.width / 80; // قلب أصغر يناسب الكيكة
       for (let i = 0; i < initialCandles; i++) {
         const t = (Math.PI * 2 * i) / initialCandles;
         const { x, y } = heartCoordinates(t, scale, rect);
