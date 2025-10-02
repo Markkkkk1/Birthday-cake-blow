@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Math.cos(4 * t);
 
     const centerX = rect.width / 2;
-    const centerY = rect.height / 25; // رفع القلب فوق الكيكة
+    const centerY = rect.height / 6; // رفع القلب أعلى في الصفحة
 
     return {
       x: centerX + x * scale,
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
   requestAnimationFrame(() => {
     const rect = cake.getBoundingClientRect();
     if (initialCandles > 0) {
-      const scale = rect.width / 60; // قلب ثابت Scale = 60
+      const scale = rect.width / 60; // حجم القلب ثابت
       for (let i = 0; i < initialCandles; i++) {
         const t = (Math.PI * 2 * i) / initialCandles;
         const { x, y } = heartCoordinates(t, scale, rect);
