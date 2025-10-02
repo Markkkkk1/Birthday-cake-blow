@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
     const average = sum / bufferLength;
 
-    return average > 20; // حساسية أسهل
+    return average > 40; // حساسية أسهل
   }
 
   function blowOutCandles() {
