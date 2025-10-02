@@ -6,11 +6,15 @@ document.addEventListener("DOMContentLoaded", function () {
   let analyser;
   let microphone;
 
-  // Read candles from URL: ?candles=23
-  function getCandlesFromURL() {
+  // Read candles + scale from URL
+  function getParamsFromURL() {
     const params = new URLSearchParams(window.location.search);
     const n = parseInt(params.get("candles"));
-    return isNaN(n) ? 0 : n;
+    const s = parseInt(params.get("scale"));
+    return {
+      candles: isNaN(n) ? 0 : n,
+      scale: isNaN(s) ? 80 : s // الافتراضي 80 (مناسب للكيكة)
+    };
   }
 
   function updateCandleCount() {
@@ -95,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Math.cos(4 * t);
 
     const centerX = rect.width / 2;
-    const centerY = rect.height / 2.8; // مظبوط فوق الطبقة
+    const centerY = rect.height / 2.8; // فوق النص شوية
 
     return {
       x: centerX + x * scale,
@@ -104,12 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Place candles in heart shape
-  const initialCandles = getCandlesFromURL();
+  const { candles: initialCandles, scale: userScale } = getParamsFromURL();
 
   requestAnimationFrame(() => {
     const rect = cake.getBoundingClientRect();
     if (initialCandles > 0) {
-      const scale = rect.width / 80; // قلب أصغر يناسب الكيكة
+      const scale = rect.width / userScale;
       for (let i = 0; i < initialCandles; i++) {
         const t = (Math.PI * 2 * i) / initialCandles;
         const { x, y } = heartCoordinates(t, scale, rect);
