@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Math.cos(4 * t);
 
     const centerX = rect.width / 2;
-    const centerY = rect.height / 2.8; // فوق النص شوية
+    const centerY = rect.height / 4; // فوق النص شوية
 
     return {
       x: centerX + x * scale,
