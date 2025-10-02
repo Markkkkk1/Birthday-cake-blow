@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Math.cos(4 * t);
 
     const centerX = rect.width / 2;
-    const centerY = rect.height / 3.5; // رفع القلب فوق الكيكة
+    const centerY = rect.height / 8; // رفع القلب فوق الكيكة
 
     return {
       x: centerX + x * scale,
