@@ -6,6 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
   let analyser;
   let microphone;
 
+  // --- NEW: get candles from URL ---
+  function getCandlesFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return parseInt(params.get("candles")) || 0;
+  }
+
   function updateCandleCount() {
     const activeCandles = candles.filter(
       (candle) => !candle.classList.contains("out")
@@ -28,18 +34,12 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCandleCount();
   }
 
-  // توزيع 23 شمعة عشوائياً فوق سطح الكيكة
-  function placeCandles() {
-    const cakeRect = cake.getBoundingClientRect();
-    const cakeWidth = cakeRect.width;
-    const cakeHeight = 100; // ارتفاع الجزء العلوي من الكيكة
-
-    for (let i = 0; i < 23; i++) {
-      const left = Math.random() * (cakeWidth - 20) + 10; 
-      const top = Math.random() * 40 + 10; // فوق سطح الكيكة
-      addCandle(left, top);
-    }
-  }
+  cake.addEventListener("click", function (event) {
+    const rect = cake.getBoundingClientRect();
+    const left = event.clientX - rect.left;
+    const top = event.clientY - rect.top;
+    addCandle(left, top);
+  });
 
   function isBlowing() {
     const bufferLength = analyser.frequencyBinCount;
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     let average = sum / bufferLength;
 
-    return average > 40;
+    return average > 40; // الصوت العالي يعتبر نفخ
   }
 
   function blowOutCandles() {
@@ -82,14 +82,21 @@ document.addEventListener("DOMContentLoaded", function () {
         microphone.connect(analyser);
         analyser.fftSize = 256;
         setInterval(blowOutCandles, 200);
-
-        // نوزّع الشموع أول ما الصفحة تفتح
-        placeCandles();
       })
       .catch(function (err) {
         console.log("Unable to access microphone: " + err);
       });
   } else {
     console.log("getUserMedia not supported on your browser!");
+  }
+
+  // --- NEW: Add initial candles from URL ---
+  const initialCandles = getCandlesFromURL();
+  const rect = cake.getBoundingClientRect();
+  for (let i = 0; i < initialCandles; i++) {
+    // توزيع الشموع عشوائي فوق نص الكيكة
+    const left = Math.random() * (rect.width - 20) + 10;
+    const top = Math.random() * (rect.height / 2);
+    addCandle(left, top);
   }
 });
