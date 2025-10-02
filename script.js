@@ -92,18 +92,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // H E A R T   S H A P E  — parametric heart
   function heartCoordinates(t, scale, rect) {
-    // classic parametric heart
-    const x = 16 * Math.pow(Math.sin(t), 3);
-    const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+  // معادلة قلب
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
 
-    // center the heart inside cake rect
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2.5; // bias upwards a bit to fit on icing
-    return {
-      x: centerX + x * scale,
-      y: centerY - y * scale
-    };
-  }
+  // مركز الكيكة
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 3; // أخليها أعلى شوية فوق الطبقة العلوية
+
+  // مضروب في scale علشان نصغره على قد الكيكة
+  return {
+    x: centerX + x * scale,
+    y: centerY + y * scale * 0.7 // الـ 0.7 دي بتضغط الشكل رأسياً عشان ماينزلش بره الكيكة
+  };
+}
 
   // Place initial candles from URL in heart shape
   const initialCandles = getCandlesFromURL();
@@ -114,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (initialCandles > 0) {
       // choose scale that fits the cake width — tweak multiplier if needed
       // scale relative to rect.width: larger width -> larger scale
-      const scale = Math.min(rect.width, rect.height) / 35; // empirical
+const scale = rect.width / 40; // دي هتخلي القلب مناسب لحجم الكيكة
       for (let i = 0; i < initialCandles; i++) {
         const t = (Math.PI * 2 * i) / initialCandles;
         const { x, y } = heartCoordinates(t, scale, rect);
