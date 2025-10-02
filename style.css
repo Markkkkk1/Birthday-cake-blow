@@ -4,6 +4,7 @@ body {
   align-items: center;
   height: 100vh;
   background: pink;
+  margin: 0;
 }
 
 .cake {
@@ -15,14 +16,23 @@ body {
 .layer {
   width: 100%;
   height: 60px;
-  background: #fff; /* أبيض */
+  background: #fff; /* الكيكة لونها أبيض */
   border-radius: 10px;
   margin: 0 auto;
 }
 
-.layer-bottom { position: absolute; bottom: 0; }
-.layer-middle { position: absolute; bottom: 60px; }
-.layer-top { position: absolute; bottom: 120px; }
+.layer-bottom { 
+  position: absolute; 
+  bottom: 0; 
+}
+.layer-middle { 
+  position: absolute; 
+  bottom: 60px; 
+}
+.layer-top { 
+  position: absolute; 
+  bottom: 120px; 
+}
 
 .icing {
   position: absolute;
@@ -31,6 +41,12 @@ body {
   height: 20px;
   background: #f8f8f8;
   border-radius: 50%;
+}
+
+.candles {
+  position: relative;   /* عشان يحتفظ بكل الشموع */
+  width: 100%;
+  height: 80px;         /* ارتفاع فوق سطح الكيكة */
 }
 
 .candle {
